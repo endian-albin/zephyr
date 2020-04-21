@@ -68,7 +68,7 @@ static void st7789v_set_lcd_margins(struct st7789v_data *data,
 
 static void st7789v_set_cmd(struct st7789v_data *data, int is_cmd)
 {
-	gpio_pin_set(data->cmd_data_gpio, ST7789V_CMD_DATA_PIN, is_cmd);
+	gpio_pin_set(data->cmd_data_gpio, ST7789V_CMD_DATA_PIN, !is_cmd);
 }
 
 static void st7789v_transmit(struct st7789v_data *data, u8_t cmd,
@@ -103,6 +103,7 @@ static void st7789v_reset_display(struct st7789v_data *data)
 	k_sleep(K_MSEC(6));
 	gpio_pin_set(data->reset_gpio, ST7789V_RESET_PIN, 0);
 	k_sleep(K_MSEC(20));
+	gpio_pin_set(data->reset_gpio, ST7789V_RESET_PIN, 1);
 #else
 	st7789v_transmit(p_st7789v, ST7789V_CMD_SW_RESET, NULL, 0);
 	k_sleep(K_MSEC(5));
